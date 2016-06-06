@@ -1,0 +1,32 @@
+{
+  "name": "chattr-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server",
+    "postinstall": "cp config_default.js config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keawade/chattr.git"
+  },
+  "author": "keawade",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/keawade/chattr/issues"
+  },
+  "homepage": "https://github.com/keawade/chattr#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.19",
+    "passport": "^0.3.2",
+    "passport-http": "^0.3.0"
+  },
+  "devDependencies": {
+    "concurrently": "^2.1.0",
+    "nodemon": "^1.9.2"
+  }
+}
