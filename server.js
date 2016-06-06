@@ -7,13 +7,8 @@ var authController = require('./controllers/auth')
 
 var config = require('./config')
 
-try {
-  mongoose.connect('mongodb://' + config.mongo.username + ':' + config.mongo.password + '@' + config.mongo.address + ':' + config.mongo.port + '/' + config.mongo.database)
-  console.log('[mongo] succesfully connected to mongodb://' + config.mongo.address + ':' + config.mongo.port + '/' + config.mongo.database)
-} catch (err) {
-  console.log('[mongo] failed to connect to mongodb://' + config.mongo.address + ':' + config.mongo.port + '/' + config.mongo.database)
-  console.log(err)
-}
+mongoose.connect('mongodb://' + config.mongo.username + ':' + config.mongo.password + '@' + config.mongo.address + ':' + config.mongo.port + '/' + config.mongo.database)
+console.log('[mongo] succesfully connected to mongodb://' + config.mongo.address + ':' + config.mongo.port + '/' + config.mongo.database)
 
 var app = express()
 
