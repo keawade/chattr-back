@@ -7,7 +7,7 @@ var roomSchema = new mongoose.Schema({
     required: true
   },
   users: [String],
-  activity: String,
+  activity: Number,
   messages: [{
     date: String,
     user: String,
