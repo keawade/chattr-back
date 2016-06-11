@@ -6,6 +6,7 @@ exports.createRoom = function (req, res) {
   room.name = req.body.name
   room.users = []
   room.messages = []
+  room.activity = Date.now()
 
   room.save(function (err) {
     if (err) {

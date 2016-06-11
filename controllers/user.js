@@ -4,7 +4,8 @@ exports.postUsers = function (req, res) {
   var user = new User({
     username: req.body.username,
     password: req.body.password,
-    email: req.body.email
+    email: req.body.email,
+    activity: Date.now()
   })
 
   user.save(function (err) {
