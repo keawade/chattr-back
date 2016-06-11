@@ -1,6 +1,8 @@
 var express = require('express')
 var mongoose = require('mongoose')
 var bodyParser = require('body-parser')
+var morgan = require('morgan')
+
 var roomController = require('./controllers/room')
 var userController = require('./controllers/user')
 var authController = require('./controllers/auth')
@@ -11,6 +13,8 @@ mongoose.connect('mongodb://' + config.mongo.username + ':' + config.mongo.passw
 console.log('[mongo] succesfully connected to mongodb://' + config.mongo.address + ':' + config.mongo.port + '/' + config.mongo.database)
 
 var app = express()
+
+app.use(morgan('dev'))
 
 app.use(bodyParser.urlencoded({
   extended: true
@@ -31,6 +35,11 @@ router.route('/users')
 
 router.route('/auth')
   .get(authController.isAuthenticated, userController.isAuthenticated)
+
+router.route('/')
+  .get(function (req, res) {
+    res.send('API is working.')
+  })
 
 app.use('/api', router)
 
