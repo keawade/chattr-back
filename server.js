@@ -21,23 +21,17 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
-var currentId = 0
-
 console.log('[socket] listening on port 8081')
 io.on('connection', function (socket) {
   console.log('[socket] user connected')
   socket.on('message', function (message) {
     console.log('[socket] ' + message.username + ' said "' + message.message + '"')
-    currentId++
     var newMessage = {
-      _id: currentId,
-      username: message.username,
-      avatarUrl: 'resource/images/' + message.username + '.png',
       date: Date.now(),
-      message: message.message.trim()
+      user: message.user,
+      content: message.content
     }
-    socket.broadcast.emit('message', newMessage)
-    socket.emit('message', newMessage)
+    io.emit('message', newMessage)
   })
 })
 
