@@ -3,6 +3,12 @@ var mongoose = require('mongoose')
 var bodyParser = require('body-parser')
 var morgan = require('morgan')
 
+// Check if running on Heroku
+if (!(process.env.NODE && ~process.env.NODE.indexOf('heroku'))) {
+  var env = require('node-env-file')
+  env('.env')
+}
+
 var roomController = require('./controllers/room')
 var userController = require('./controllers/user')
 var authController = require('./controllers/auth')

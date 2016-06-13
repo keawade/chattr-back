@@ -46,9 +46,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Local config file
-config.js
-
 # Logs
 logs
 *.log

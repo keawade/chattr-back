@@ -14,5 +14,5 @@ This is the backend sockets and database solution for chattr. The frontend solut
 ## Installation
 
 1. Run `npm install`.
-2. Update `config.js` with the correct environment data.
+2. Update `.env` with the correct environment data.
 3. Run `npm start`
