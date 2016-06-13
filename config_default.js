@@ -1,7 +1,7 @@
 var config = {}
 
 config.express = {}
-config.express.address = 'process.env.ADDRESS || localhost'
+config.express.address = process.env.ADDRESS || 'localhost'
 config.express.port = process.env.PORT || 3000
 
 config.mongo = {}
