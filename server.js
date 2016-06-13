@@ -34,17 +34,23 @@ io.set('origins', '*:*')
 
 console.log('[socket] server listening at ' + config.express.port)
 io.on('connection', function (socket) {
-  console.log('[socket] user connected')
-  socket.on('message', function (message) {
-    console.log('[socket] ' + message.username + ' said "' + message.message + '"')
-    var newMessage = {
-      date: Date.now(),
-      user: message.user,
-      content: message.content
-    }
-    io.emit('message', newMessage)
-  })
+  socket.on('connected', onConnect)
+  socket.on('message', onMessage)
 })
+
+function onConnect (data) {
+  console.log('[socket] user connected')
+}
+
+function onMessage (data) {
+  var message = {
+    date: Date.now(),
+    user: data.user,
+    content: data.content
+  }
+  console.log('[socket] message sent')
+  io.emit('message', message)
+}
 
 var router = express.Router()
 
