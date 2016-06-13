@@ -17,12 +17,12 @@ var app = express()
 var server = require('http').createServer(app)
 var io = require('socket.io')(server)
 
-app.use(function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'https://chattr-front-react-keawade.c9users.io');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS, PATCH');
-    next();
-});
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', 'https://chattr-front-react-keawade.c9users.io')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS, PATCH')
+  next()
+})
 
 app.use(morgan('dev'))
 
