@@ -18,18 +18,14 @@
   },
   "homepage": "https://github.com/keawade/chattr#readme",
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
     "mongoose": "^4.4.19",
     "morgan": "^1.7.0",
     "node-env-file": "^0.1.8",
-    "passport": "^0.3.2",
-    "passport-http": "^0.3.0",
     "socket.io": "1.4.6"
   },
   "devDependencies": {
-    "concurrently": "^2.1.0",
     "nodemon": "^1.9.2"
   }
 }
