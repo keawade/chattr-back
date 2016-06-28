@@ -26,11 +26,12 @@ app.use(bodyParser.urlencoded({
 
 // Sockets
 io
-    .on('connection', socketioJwt.authorize({
-        secret: Buffer(process.env.AUTH0_CLIENT_SECRET, 'base64'),
-        timeout: 15000 // 15 seconds to send the authentication message
-    })).on('authenticated', function (socket) {
-        console.log('[auth] socket authenticated', JSON.stringify(socket.decoded_token))
+    // .on('connection', socketioJwt.authorize({
+    //     secret: Buffer(process.env.AUTH0_CLIENT_SECRET, 'base64'),
+    //     timeout: 15000 // 15 seconds to send the authentication message
+    // })).on('authenticated', function (socket) {
+      .on('connection', function(socket){
+        //console.log('[auth] socket authenticated', JSON.stringify(socket.decoded_token))
         socket.on('chat message', function (msg) {
             io.emit('chat message', msg);
         });
