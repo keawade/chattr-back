@@ -1,20 +1,23 @@
 var express = require('express')
+var app = express()
+var http = require('http').Server(app)
+var io = require('socket.io')(http)
+var socketioJwt = require('socketio-jwt')
 var mongoose = require('mongoose')
 var bodyParser = require('body-parser')
 var morgan = require('morgan')
+var dotenv = require('dotenv')
 
-// Check if running on Heroku
-if (!(process.env.NODE && ~process.env.NODE.indexOf('heroku'))) {
-  var env = require('node-env-file')
-  env('.env')
-}
+dotenv.load()
 
-var config = require('./config')
-var app = express()
-var server = require('http').createServer(app)
+var env = {
+  AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
+  AUTH0_DOMAIN: process.env.AUTH0_DOMAIN
+};
+var port = process.env.PORT || 3000
 
-mongoose.connect('mongodb://' + config.mongo.username + ':' + config.mongo.password + '@' + config.mongo.address + ':' + config.mongo.port + '/' + config.mongo.database)
-console.log('[mongo] succesfully connected to mongodb://' + config.mongo.address + ':' + config.mongo.port + '/' + config.mongo.database)
+mongoose.connect('mongodb://' + process.env.MONGO_USER + ':' + process.env.MONGO_PASS + '@' + process.env.MONGO_ADDRESS + ':' + process.env.MONGO_PORT + '/' + process.env.MONGO_NAME)
+console.log('[mongo] succesfully connected to mongodb://' + process.env.MONGO_ADDRESS + ':' + process.env.MONGO_PORT + '/' + process.env.MONGO_NAME)
 
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({
@@ -22,25 +25,17 @@ app.use(bodyParser.urlencoded({
 }))
 
 // Sockets
-var socket = require('socket.io').listen(app)
-require('socketio-auth')(io, {
-  authenticate: function (socket, data, callback) {
-    // get credentials from client
-    var username: data.username
-    var password: data.password
-
-    mongoose.findUser('User', {username: usernae}, function(err, user) {
-      // wtf is findUser here for?
-      // Inform callback of success or fail
-
-      if (err || !user) {
-        return callback(new Error('User not found'))
-      }
-      return callback(null, user.password == password)
+io
+    .on('connection', socketioJwt.authorize({
+        secret: Buffer(process.env.AUTH0_CLIENT_SECRET, 'base64'),
+        timeout: 15000 // 15 seconds to send the authentication message
+    })).on('authenticated', function (socket) {
+        console.log('[auth] socket authenticated', JSON.stringify(socket.decoded_token))
+        socket.on('chat message', function (msg) {
+            io.emit('chat message', msg);
+        });
     })
-  }
+
+http.listen(port, function(){
+  console.log('listening on *:' + port)
 })
-
-
-server.listen(config.express.port)
-console.log('[server] running at port ' + config.express.port)
