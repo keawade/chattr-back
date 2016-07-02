@@ -9,7 +9,6 @@ var bodyParser = require('body-parser')
 var morgan = require('morgan')
 var dotenv = require('dotenv')
 var request = require('request')
-var entities = require('html-entities').AllHtmlEntities
 
 var User = require('./models/user')
 
@@ -40,25 +39,33 @@ io
     secret: Buffer(process.env.AUTH0_CLIENT_SECRET, 'base64'),
     timeout: 15000 // 15 seconds to send the authentication message
   })).on('authenticated', function (socket) {
-    let userId = entities.decode(JSON.stringify(socket.decoded_token.sub))
+    let userId = socket.decoded_token.sub
     console.log('[auth] socket authenticated:', userId)
     User.findOne({'user_id': userId}, (err, user) => {
       if (err) {
         console.error('[mongo] err:', err)
       }
-      if (!user) {
-        console.log(`[mongo] did not find user for id: ${userId}`)
-        request(`${apiConfig.baseUrl}/users/${userId}`)
-          .auth(null, null, true, apiConfig.bearerToken)
-          .on('response', (response) => {
-            console.log('got response', response.statusCode)
+      request({
+        method: 'GET',
+        uri: `${apiConfig.baseUrl}/users/${userId}`,
+        auth: {
+          bearer: apiConfig.bearerToken
+        }
+      }, (error, response, body) => {
+        if (!error && response.statusCode == 200) {
+          let temp = JSON.parse(body)
+          let user = new User({
+            email: temp.email,
+            name: temp.name,
+            picture: temp.picture,
+            user_id: temp.user_id,
+            nickname: temp.nickname,
+            last_login: temp.last_login
           })
-          .on('error', (error) => {
-            console.error('error', error)
-          })
-      } else {
-        
-      }
+          console.log('[mongo] saved user', user.user_id)
+          user.save()
+        }
+      })
     })
     socket.on('room connect', (data) => {
 
